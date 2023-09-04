@@ -26,6 +26,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.widget.CheckedTextView;
 import android.widget.TextView;
 
 /**
@@ -44,7 +45,7 @@ import android.widget.TextView;
  * <p/>
  * From https://gist.github.com/pyricau/3424004 with fix from comments
  */
-public class JellyBeanSpanFixTextView extends TextView {
+public class JellyBeanSpanFixTextView extends CheckedTextView {
 
     private static class FixingResult {
         public final boolean fixed;

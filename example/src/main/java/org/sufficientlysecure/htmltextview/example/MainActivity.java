@@ -16,6 +16,8 @@
 
 package org.sufficientlysecure.htmltextview.example;
 
+import static org.sufficientlysecure.htmltextview.example.WebViewActivity.EXTRA_TABLE_HTML;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,15 +27,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
-
 import org.sufficientlysecure.htmltextview.ClickableTableSpan;
 import org.sufficientlysecure.htmltextview.DrawTableLinkSpan;
 import org.sufficientlysecure.htmltextview.HtmlResImageGetter;
 import org.sufficientlysecure.htmltextview.HtmlTextView;
-import org.sufficientlysecure.htmltextview.OnClickATagListener;
-
-import static org.sufficientlysecure.htmltextview.example.WebViewActivity.EXTRA_TABLE_HTML;
 
 public class MainActivity extends Activity {
 
@@ -57,12 +54,12 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        HtmlTextView textView = (HtmlTextView) findViewById(R.id.html_text);
+        HtmlTextView textView = findViewById(R.id.html_text);
 
         //text.setRemoveFromHtmlSpace(false); // default is true
         textView.setClickableTableSpan(new ClickableTableSpanImpl());
         DrawTableLinkSpan drawTableLinkSpan = new DrawTableLinkSpan();
+
         drawTableLinkSpan.setTableLinkText("[tap for table]");
         textView.setDrawTableLinkSpan(drawTableLinkSpan);
 
@@ -72,16 +69,15 @@ public class MainActivity extends Activity {
         textView.setListIndentPx(metrics.density * 10);
 
         // a tag click listener
-        textView.setOnClickATagListener(new OnClickATagListener() {
-            @Override
-            public boolean onClick(View widget, String spannedText, @Nullable String href) {
-                final Toast toast = Toast.makeText(MainActivity.this, null, Toast.LENGTH_SHORT);
-                toast.setText(href);
-                toast.show();
+        textView.setOnClickATagListener((widget, spannedText, href) -> {
+            final Toast toast = Toast.makeText(MainActivity.this, null, Toast.LENGTH_SHORT);
+            toast.setText(href);
+            toast.show();
 
-                return false;
-            }
+            return false;
         });
+
+
         textView.blockQuoteBackgroundColor = getResources().getColor(R.color.whitish);
         textView.blockQuoteStripColor = getResources().getColor(R.color.blue);
 
