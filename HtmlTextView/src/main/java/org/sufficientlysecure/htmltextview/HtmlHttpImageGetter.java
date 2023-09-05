@@ -133,6 +133,7 @@ public class HtmlHttpImageGetter implements ImageGetter {
         protected Drawable doInBackground(String... params) {
             source = params[0];
 
+
             if (resources.get() != null) {
                 if (compressImage) {
                     return fetchCompressedDrawable(resources.get(), source);
@@ -181,6 +182,7 @@ public class HtmlHttpImageGetter implements ImageGetter {
                 drawable.setBounds(0, 0, (int) (drawable.getIntrinsicWidth() * scale), (int) (drawable.getIntrinsicHeight() * scale));
                 return drawable;
             } catch (Exception e) {
+                e.printStackTrace();
                 return null;
             }
         }
@@ -207,6 +209,7 @@ public class HtmlHttpImageGetter implements ImageGetter {
                 b.setBounds(0, 0, (int) (b.getIntrinsicWidth() * scale), (int) (b.getIntrinsicHeight() * scale));
                 return b;
             } catch (Exception e) {
+                e.printStackTrace();
                 return null;
             }
         }
@@ -235,7 +238,7 @@ public class HtmlHttpImageGetter implements ImageGetter {
             return maxWidth / originalDrawableWidth;
         }
 
-        private InputStream fetch(String urlString) throws IOException {
+        private InputStream fetch(String urlString) throws Exception {
             URL url;
             final HtmlHttpImageGetter imageGetter = imageGetterReference.get();
             if (imageGetter == null) {
@@ -246,7 +249,7 @@ public class HtmlHttpImageGetter implements ImageGetter {
             } else {
                 url = URI.create(urlString).toURL();
             }
-            Log.d(TAG, "fetch() called with: urlString = [" + url.toString()+ "]");
+            Log.d(TAG, "fetch() called with: urlString = [" + url.toString() + "]");
 
             return (InputStream) url.getContent();
         }
