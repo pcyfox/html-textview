@@ -38,7 +38,8 @@ import java.net.URI;
 import java.net.URL;
 
 public class HtmlHttpImageGetter implements ImageGetter {
-    private TextView container;
+    private static final String TAG = "HtmlHttpImageGetter";
+    private final TextView container;
     private URI baseUri;
     private boolean matchParentWidth;
     private int placeHolder;
@@ -59,10 +60,10 @@ public class HtmlHttpImageGetter implements ImageGetter {
     }
 
     public HtmlHttpImageGetter(TextView textView, String baseUrl, boolean matchParentWidth) {
-       this(textView,baseUrl,0,matchParentWidth);
+        this(textView, baseUrl, 0, matchParentWidth);
     }
 
-    public HtmlHttpImageGetter(TextView textView, String baseUrl,int placeHolder, boolean matchParentWidth) {
+    public HtmlHttpImageGetter(TextView textView, String baseUrl, int placeHolder, boolean matchParentWidth) {
         this.container = textView;
         this.placeHolder = placeHolder;
         this.matchParentWidth = matchParentWidth;
@@ -245,6 +246,7 @@ public class HtmlHttpImageGetter implements ImageGetter {
             } else {
                 url = URI.create(urlString).toURL();
             }
+            Log.d(TAG, "fetch() called with: urlString = [" + url.toString()+ "]");
 
             return (InputStream) url.getContent();
         }

@@ -34,6 +34,10 @@ import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 public class MainActivity extends Activity {
 
+    static {
+        HtmlTextView.setBaseUrl("https://img0.baidu.com");
+    }
+
     // The html table(s) are individually passed through to the ClickableTableSpan implementation
     // presumably for a WebView activity.
     class ClickableTableSpanImpl extends ClickableTableSpan {
@@ -53,6 +57,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         HtmlTextView textView = findViewById(R.id.html_text);
 
@@ -81,7 +86,7 @@ public class MainActivity extends Activity {
         textView.blockQuoteBackgroundColor = getResources().getColor(R.color.whitish);
         textView.blockQuoteStripColor = getResources().getColor(R.color.blue);
 
-        textView.setHtml(R.raw.example, new HtmlResImageGetter(getBaseContext()));
+        textView.setHtml(R.raw.example);
     }
 
     @Override

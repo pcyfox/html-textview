@@ -34,6 +34,7 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
 
     public static final String TAG = "HtmlTextView";
     public static final boolean DEBUG = false;
+    private static String baseUrl;
     public int blockQuoteBackgroundColor = getResources().getColor(R.color.White);
     public int blockQuoteStripColor = getResources().getColor(R.color.black);
     public float blockQuoteStripWidth = 10F;
@@ -45,8 +46,9 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
     @Nullable
     private OnClickATagListener onClickATagListener;
     private float indent = 24.0f; // Default to 24px.
-
     private boolean removeTrailingWhiteSpace = true;
+    private Html.ImageGetter imageGetter;
+
 
     public HtmlTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -60,18 +62,39 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
         super(context);
     }
 
+    {
+        if (null != baseUrl)
+            imageGetter = new HtmlHttpImageGetter(this, baseUrl, false);
+    }
+
+    public Html.ImageGetter getImageGetter() {
+        return imageGetter;
+    }
+
+    public void setImageGetter(Html.ImageGetter imageGetter) {
+        this.imageGetter = imageGetter;
+    }
+
+    public static String getBaseUrl() {
+        return baseUrl;
+    }
+
+    public static void setBaseUrl(String baseUrl) {
+        HtmlTextView.baseUrl = baseUrl;
+    }
+
     /**
      * @see org.sufficientlysecure.htmltextview.HtmlTextView#setHtml(int)
      */
     public void setHtml(@RawRes int resId) {
-        setHtml(resId, null);
+        setHtml(resId, imageGetter);
     }
 
     /**
      * @see org.sufficientlysecure.htmltextview.HtmlTextView#setHtml(String)
      */
     public void setHtml(@NonNull String html) {
-        setHtml(html, null);
+        setHtml(html, imageGetter);
     }
 
     /**
@@ -100,12 +123,7 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
     public void setHtml(@NonNull String html, @Nullable Html.ImageGetter imageGetter) {
         Spanned styledText = HtmlFormatter.formatHtml(
                 html, imageGetter, clickableTableSpan, drawTableLinkSpan,
-                new HtmlFormatter.TagClickListenerProvider() {
-                    @Override
-                    public OnClickATagListener provideTagClickListener() {
-                        return onClickATagListener;
-                    }
-                }, indent, removeTrailingWhiteSpace
+                () -> onClickATagListener, indent, removeTrailingWhiteSpace
         );
         replaceQuoteSpans(styledText);
         setText(styledText);
