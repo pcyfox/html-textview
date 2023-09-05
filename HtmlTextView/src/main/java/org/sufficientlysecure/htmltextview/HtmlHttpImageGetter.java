@@ -132,9 +132,8 @@ public class HtmlHttpImageGetter implements ImageGetter {
         @Override
         protected Drawable doInBackground(String... params) {
             source = params[0];
-
-
             if (resources.get() != null) {
+                if (source.length() > 1200) return null;
                 if (compressImage) {
                     return fetchCompressedDrawable(resources.get(), source);
                 } else {
