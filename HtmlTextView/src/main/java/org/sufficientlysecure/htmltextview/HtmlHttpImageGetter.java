@@ -25,6 +25,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.text.Html.ImageGetter;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -132,8 +133,8 @@ public class HtmlHttpImageGetter implements ImageGetter {
         @Override
         protected Drawable doInBackground(String... params) {
             source = params[0];
+            if (source.length() > 1200 || TextUtils.isEmpty(source)) return null;
             if (resources.get() != null) {
-                if (source.length() > 1200) return null;
                 if (compressImage) {
                     return fetchCompressedDrawable(resources.get(), source);
                 } else {
